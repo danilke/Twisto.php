@@ -99,21 +99,6 @@ class Invoice
         $this->deserialize($data);
     }
 
-    public static function set_payload($data)
-    {
-        date_default_timezone_set('Europe/Prague');
-        $year = substr(date('Y'), -1);
-        $day = sprintf('%03d', date('z'));
-        $random = rand(10000000, 99999999);
-        $provider_id = 'E'.$year.$day.$random;
-        $provider_date  = date('Y-m-d').'T'.date('H:i:sO');
-
-        $data['provider_id'] = $provider_id;
-        $data['provider_date'] = $provider_date;
-
-        return data;
-    }
-
 
     /**
      * Create new invoice using transaction_id from check
@@ -128,7 +113,7 @@ class Invoice
             'transaction_id' => $transaction_id
         );
 
-        $data = $twisto->set_payload($data);
+        $data = $twisto->setPayload($data);
 
 
         if ($eshop_invoice_id !== null) {
@@ -171,7 +156,7 @@ class Invoice
     public function returnAll()
     {
         $data = $this->twisto->requestJson('POST', 'invoice/' . urlencode($this->invoice_id) . '/return/all/');
-        $data = $twisto->set_payload($data);
+        $data = $twisto->setPayload($data);
         $this->deserialize($data);
     }
     
@@ -184,7 +169,7 @@ class Invoice
         $data = array(
             'amount' => (float)$amount
         );
-        $data = $twisto->set_payload($data);
+        $data = $twisto->setPayload($data);
         $data = $this->twisto->requestJson('POST', 'invoice/' . urlencode($this->invoice_id) . '/refund/', $data);
         $this->deserialize($data);
     }

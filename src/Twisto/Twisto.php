@@ -92,7 +92,7 @@ class Twisto
         return $json;
     }
 
-    public function set_payload($data)
+    public function setPayload($data)
     {
         date_default_timezone_set('Europe/Prague');
         $year = substr(date('Y'), -1);
