@@ -92,6 +92,21 @@ class Twisto
         return $json;
     }
 
+    public function set_payload($data)
+    {
+        date_default_timezone_set('Europe/Prague');
+        $year = substr(date('Y'), -1);
+        $day = sprintf('%03d', date('z'));
+        $random = rand(10000000, 99999999);
+        $provider_id = 'E'.$year.$day.$random;
+        $provider_date  = date('Y-m-d').'T'.date('H:i:sO');
+
+        $data['provider_id'] = $provider_id;
+        $data['provider_date'] = $provider_date;
+
+        return $data;
+    }
+
 
     /**
      * Perform API request
@@ -138,16 +153,7 @@ class Twisto
      */
     public function getCheckPayload(Customer $customer, Order $order, $previous_orders)
     {   
-        date_default_timezone_set('Europe/Prague');
-        $year = substr(date('Y'), -1);
-        $day = date('d');
-        $random = rand(10000000, 99999999);
-        $provider_id = 'E'.$year.$day.$random;
-        $provider_date  = date('Y-m-d').'T'.date('H:i:sO');
-
         $payload = json_encode(array(
-            'provider_id' => $provider_id,
-            'provider_date' => $provider_date,
             'random_nonce' => uniqid('', true),
             'customer' => $customer->serialize(),
             'order' => $order->serialize(),
